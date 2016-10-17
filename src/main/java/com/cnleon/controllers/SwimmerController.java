@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * Controller to respond to all the calls that starts by /swimmer
  *
@@ -32,6 +34,11 @@ public class SwimmerController {
      */
     @Autowired
     private SwimmerService swimmerService;
+
+    @RequestMapping("/swimmers")
+    public @ResponseBody List<Swimmer> getSwimmers(){
+        return swimmerService.getSwimmers();
+    }
 
     /**
      * Method that obtain a swimmer by its identifier in the DB.

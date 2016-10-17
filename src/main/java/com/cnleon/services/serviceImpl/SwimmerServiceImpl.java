@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Implementation of the Swimmer Service Interface to perform operations on swimmers
@@ -29,6 +30,16 @@ public class SwimmerServiceImpl implements SwimmerService {
      */
     @Autowired
     private SwimmerRepository swimmerRepository;
+
+    /**
+     * Returns all the swimmers available in the DB.
+     * @return list of all the swimmers available or an empty list if there are any.
+     */
+    @Override
+    public List<Swimmer> getSwimmers() {
+        logger.info("Returning all the swimmers in the DB.");
+        return swimmerRepository.findAll();
+    }
 
     /**
      * Returns a swimmer by its identifier

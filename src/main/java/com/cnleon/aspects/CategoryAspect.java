@@ -135,7 +135,8 @@ public class CategoryAspect {
      * {@link MongoRepository#findAll()}
      * @param swimmers - the list of swimmers obtained from the DB.
      */
-    @AfterReturning(pointcut = "execution(* org.springframework.data.mongodb.repository.MongoRepository.findAll(..))",
+    @AfterReturning(pointcut = "execution(* org.springframework.data.mongodb.repository.MongoRepository.findAll(..)) " +
+            "|| execution(* org.springframework.data.mongodb.core.MongoTemplate.findAll(..))",
     returning = "swimmers")
     public void setSwimmersCategoryFromList(Object swimmers){
         Iterator<Swimmer> swimmerIterator = ((List<Swimmer>) swimmers).iterator();

@@ -1,6 +1,7 @@
 package com.cnleon.services.serviceImpl;
 
 import com.cnleon.domains.Swimmer;
+import com.cnleon.enumerates.Category;
 import com.cnleon.repositories.SwimmerRepository;
 import com.cnleon.services.SwimmerService;
 import org.slf4j.Logger;
@@ -39,6 +40,17 @@ public class SwimmerServiceImpl implements SwimmerService {
     public List<Swimmer> getSwimmers() {
         logger.info("Returning all the swimmers in the DB.");
         return swimmerRepository.findAll();
+    }
+
+    /**
+     * Method to return all the swimmers from a category
+     * @param category - the category to search swimmers from
+     * @return a list with all the swimmers from that category
+     */
+    @Override
+    public List<Swimmer> getSwimmersByCategory(Category category) {
+        logger.info("Searching for all the swimmers in the DB in " + category + " category");
+        return swimmerRepository.findAllByCategory(category);
     }
 
     /**

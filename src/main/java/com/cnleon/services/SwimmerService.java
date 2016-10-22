@@ -1,6 +1,8 @@
 package com.cnleon.services;
 
 import com.cnleon.domains.Swimmer;
+import com.cnleon.enumerates.Category;
+
 import java.util.List;
 
 /**
@@ -15,6 +17,13 @@ public interface SwimmerService {
      * @return list of all the swimmers available or an empty list if there are any.
      */
     List<Swimmer> getSwimmers();
+
+    /**
+     * Method to return all the swimmers from a category
+     * @param category - the category to search swimmers from
+     * @return a list with all the swimmers from that category
+     */
+    List<Swimmer> getSwimmersByCategory(Category category);
 
     /**
      * Returns a swimmer by its identifier

@@ -32,6 +32,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-aop')
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	//Logging
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '1.4.1.RELEASE'
 	testCompile('org.springframework.boot:spring-boot-starter-test')

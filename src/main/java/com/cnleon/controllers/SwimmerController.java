@@ -1,5 +1,7 @@
 package com.cnleon.controllers;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import com.cnleon.converters.CategoryEnumConverter;
 import com.cnleon.domains.Swimmer;
 import com.cnleon.enumerates.Category;
@@ -8,9 +10,12 @@ import com.cnleon.services.SwimmerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -43,8 +48,11 @@ public class SwimmerController {
     }
 
     @RequestMapping("/swimmers")
-    public @ResponseBody List<Swimmer> getSwimmers(){
-        return swimmerService.getSwimmers();
+    public @ResponseBody Collection<Resource<Swimmer>> getSwimmers(){
+        Collection<Swimmer> swimmers = swimmerService.getSwimmers();
+        Collection<Resource<Swimmer>> resources = new ArrayList<>();
+        swimmers.forEach((swimmer -> resources.add(getSwimmerResource(swimmer))));
+        return resources;
     }
 
     /**
@@ -54,8 +62,10 @@ public class SwimmerController {
      */
     //TODO: handle if the the swimmer is not found in the DB.
     @RequestMapping("/swimmers/{id}")
-    public @ResponseBody Swimmer getSwimmer(@PathVariable String id){
-        return swimmerService.getSwimmer(id);
+    public @ResponseBody
+    Resource<Swimmer> getSwimmer(@PathVariable String id){
+        Swimmer swimmer = swimmerService.getSwimmer(id);
+        return getSwimmerResource(swimmer);
     }
 
     /**
@@ -66,5 +76,19 @@ public class SwimmerController {
     @RequestMapping("/swimmers/category/{category}")
     public @ResponseBody List<Swimmer> getSwimmersByCategory(@PathVariable Category category){
         return swimmerService.getSwimmersByCategory(category);
+    }
+
+    /**
+     * Method to construct a resource for a single swimmer.
+     * @param swimmer - the swimmer to construct the resource from.
+     * @return the resource constructed for the swimmer.
+     */
+    private Resource<Swimmer> getSwimmerResource(Swimmer swimmer){
+        Resource<Swimmer> resource = new Resource<>(swimmer);
+
+        //Link to swimmer (self)
+        resource.add(linkTo(methodOn(SwimmerController.class).getSwimmer(swimmer.getId())).withSelfRel());
+
+        return resource;
     }
 }

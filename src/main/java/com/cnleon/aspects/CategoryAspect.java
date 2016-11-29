@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -139,11 +140,22 @@ public class CategoryAspect {
             "|| execution(* org.springframework.data.mongodb.core.MongoTemplate.findAll(..))",
     returning = "swimmers")
     public void setSwimmersCategoryFromList(Object swimmers){
-        Iterator<Swimmer> swimmerIterator = ((List<Swimmer>) swimmers).iterator();
-        while (swimmerIterator.hasNext()){
-            Swimmer swimmer = swimmerIterator.next();
-            logger.debug("Calculating category for swimmer " + swimmer.getId());
-            this.setSwimmerCategory(swimmer);
+        //This code is to force that this method is only called for calls to MongoRepository.findAll
+        //and MongoTemplate.findAll that return a Swimmer type.
+        //TODO: Review if there is a better way to do this!
+        if (swimmers instanceof List) {
+            ArrayList<Object> genericList = (ArrayList<Object>) swimmers;
+            if (genericList.size() > 0) {
+                Object firstElement = genericList.get(0);
+                if (firstElement instanceof  Swimmer){
+                    Iterator<Swimmer> swimmerIterator = ((List<Swimmer>) swimmers).iterator();
+                    while (swimmerIterator.hasNext()){
+                        Swimmer swimmer = swimmerIterator.next();
+                        logger.debug("Calculating category for swimmer " + swimmer.getId());
+                        this.setSwimmerCategory(swimmer);
+                    }
+                }
+            }
         }
     }
 

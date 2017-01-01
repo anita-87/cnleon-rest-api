@@ -117,14 +117,17 @@ public class CategoryAspect {
     @AfterReturning(pointcut = "execution(* com.cnleon.repositories.SwimmerRepository.findById(..))",
     returning = "swimmer")
     public void setSwimmerCategory(Object swimmer){
-        logger.info("Swimmer id is: " + ((Swimmer) swimmer).getId());
-        if (((Swimmer) swimmer).getIsMaster() == true){
-            ((Swimmer) swimmer).setCategory(Category.MASTER);
-        } else {
-            if (((Swimmer) swimmer).getGender().equals(Gender.MALE))
-                ((Swimmer) swimmer).setCategory(this.calculateMaleCategory(((Swimmer) swimmer).getBirthDate()));
-            else
-                ((Swimmer) swimmer).setCategory(this.calculateFemaleCategory(((Swimmer) swimmer).getBirthDate()));
+        //Only handle this is the swimmer is not null
+        if (swimmer != null) {
+            logger.info("Swimmer id is: " + ((Swimmer) swimmer).getId());
+            if (((Swimmer) swimmer).getIsMaster() == true) {
+                ((Swimmer) swimmer).setCategory(Category.MASTER);
+            } else {
+                if (((Swimmer) swimmer).getGender().equals(Gender.MALE))
+                    ((Swimmer) swimmer).setCategory(this.calculateMaleCategory(((Swimmer) swimmer).getBirthDate()));
+                else
+                    ((Swimmer) swimmer).setCategory(this.calculateFemaleCategory(((Swimmer) swimmer).getBirthDate()));
+            }
         }
     }
 

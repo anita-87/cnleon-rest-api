@@ -209,4 +209,11 @@ public class Swimmer {
     public void setIsMaster(boolean isMaster){
         this.isMaster = isMaster;
     }
+
+    /**
+     * Getter that returns the full name of the swimmer.
+     * The full name consists of the first name, a blank space and the last name.
+     * @return string with the full name of the swimmer.
+     */
+    public String getFullName(){ return this.getFirstName() + " " + this.getLastName();}
 }

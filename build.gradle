@@ -35,5 +35,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	//Logging
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '1.4.1.RELEASE'
+	//Apache Commons Lang
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

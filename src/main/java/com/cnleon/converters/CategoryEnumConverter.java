@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import java.beans.PropertyEditorSupport;
 /**
  * Class to convert strings to Category enumerates.
+ *
  * Created by anita on 18/10/16.
  */
 @Component

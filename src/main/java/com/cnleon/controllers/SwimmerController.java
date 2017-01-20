@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,7 +68,7 @@ public class SwimmerController {
      * resources of type SwimmerResponse (small sample of a swimmer info)
      */
     @RequestMapping("/swimmers")
-    public @ResponseBody Collection<Resource<SwimmerResponse>> getSwimmers(){
+    public Collection<Resource<SwimmerResponse>> getSwimmers(){
         List<Swimmer> swimmers = swimmerService.getSwimmers();
         Collection<SwimmerResponse> swimmerResponses =
                 swimmerToSwimmerResponseConverter.swimmerListToSwimmerResponseList(swimmers);
@@ -82,8 +84,7 @@ public class SwimmerController {
      */
     //TODO: handle if the the swimmer is not found in the DB.
     @RequestMapping("/swimmers/{id}")
-    public @ResponseBody
-    Resource<Swimmer> getSwimmer(@PathVariable String id){
+    public Resource<Swimmer> getSwimmer(@PathVariable String id){
         Swimmer swimmer = swimmerService.getSwimmer(id);
         //TODO: handle if the the swimmer is not found in the DB.
         //TODO: using a exception???
@@ -96,13 +97,24 @@ public class SwimmerController {
      * @return a list with all the swimmers from that category
      */
     @RequestMapping("/swimmers/category/{category}")
-    public @ResponseBody Collection<Resource<SwimmerResponse>> getSwimmersByCategory(@PathVariable Category category){
+    public Collection<Resource<SwimmerResponse>> getSwimmersByCategory(@PathVariable Category category){
         List<Swimmer> swimmers = swimmerService.getSwimmersByCategory(category);
         Collection<SwimmerResponse> swimmerResponses =
                 swimmerToSwimmerResponseConverter.swimmerListToSwimmerResponseList(swimmers);
         Collection<Resource<SwimmerResponse>> resources = new ArrayList<>();
         swimmerResponses.forEach((swimmerResponse -> resources.add(getSwimmerResponseResource(swimmerResponse))));
         return resources;
+    }
+
+    /**
+     * Method to save a swimmer instance into the database.
+     * @param swimmer - the swimmer to be stored.
+     * @return the stored swimmer.
+     */
+    @RequestMapping(value = "/swimmers", method = RequestMethod.POST)
+    public ResponseEntity<Resource<Swimmer>> saveSwimmer(@RequestBody Swimmer swimmer) {
+        swimmer = swimmerService.saveSwimmer(swimmer);
+        return new ResponseEntity<>(this.getSwimmerResource(swimmer), HttpStatus.CREATED);
     }
 
     /**

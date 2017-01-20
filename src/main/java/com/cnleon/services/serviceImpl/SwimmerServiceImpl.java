@@ -63,4 +63,15 @@ public class SwimmerServiceImpl implements SwimmerService {
         logger.info("Searching for swimmer with id '"+id+"'");
         return swimmerRepository.findById(id);
     }
+
+    /**
+     * Saves a swimmer object to the DB.
+     * @param swimmer - the swimmer to be stored.
+     * @return the saved swimmer object.
+     */
+    @Override
+    public Swimmer saveSwimmer(Swimmer swimmer) {
+        logger.info("Saving new swimmer with licence '"+swimmer.getLicence()+"' into the DB.");
+        return swimmerRepository.save(swimmer);
+    }
 }

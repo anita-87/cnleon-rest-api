@@ -31,4 +31,11 @@ public interface SwimmerService {
      * @return the swimmer instance or null if the swimmer is not found.
      */
     Swimmer getSwimmer(String id);
+
+    /**
+     * Saves a swimmer object to the DB.
+     * @param swimmer - the swimmer to be stored.
+     * @return the saved swimmer object.
+     */
+    Swimmer saveSwimmer(Swimmer swimmer);
 }

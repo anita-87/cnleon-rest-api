@@ -45,7 +45,7 @@ public class Swimmer {
      * Birth date of the swimmer.
      * When represented in JSON format will follow the pattern "dd-MM-yyyy"
      */
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
     /**
      * Birth place of the swimmer.
@@ -57,7 +57,6 @@ public class Swimmer {
      * This is use because age only is not enough to figure out the category of the swimmer.
      * This property is not shown in the REST API responses.
      */
-    @JsonIgnore
     private boolean isMaster;
     /**
      * Category of the swimmer. Is not stored in the DB.

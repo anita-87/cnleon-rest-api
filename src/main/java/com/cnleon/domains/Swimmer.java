@@ -23,7 +23,7 @@ public class Swimmer {
      * Id of the swimmer in the DB.
      */
     @Id
-    private String id;
+    private String _id;
     /**
      * Licence of the swimmer.
      */
@@ -70,7 +70,7 @@ public class Swimmer {
      * @return the identifier of the swimmer.
      */
     public String getId() {
-        return id;
+        return _id;
     }
 
     /**
@@ -78,7 +78,7 @@ public class Swimmer {
      * @param id - the identifier of the swimmer to be assigned.
      */
     public void setId(String id) {
-        this.id = id;
+        this._id = id;
     }
 
     /**

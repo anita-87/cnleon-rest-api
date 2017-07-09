@@ -32,7 +32,7 @@ import java.util.List;
  *
  * Created by anita on 12/10/16.
  */
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:4300")
 @RestController
 public class SwimmerController {
 

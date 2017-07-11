@@ -75,7 +75,7 @@ public class SwimmerControllerTest {
     private SwimmerToSwimmerResponseConverter swimmerToSwimmerResponseConverter;
 
     /**
-     * Test the the "retriveAllSwimmsers" with the expected results.
+     * Test the the "retrieveAllSwimmers" with the expected results.
      *
      * The test should return 200 - OK Status; The body of the response is in JSON.
      * The body of the response contains two swimmersResponse objects that are checked
@@ -114,6 +114,35 @@ public class SwimmerControllerTest {
                 .andExpect(jsonPath("$[1].gender", is(Gender.MALE.toString())));
 
     }
+
+    /**
+     * Test the "retrieveAllSwimmers" method with the service returning an empty list of swimmers.
+     *
+     * The test should return 200 - OK Status; The body of the response is in JSON.
+     * The body of the response is an empty array in JSON.
+     *
+     * SwimmerService calls and SwimmerToSwimmerResponseConverter calls are mocked.
+     *
+     * @throws Exception - throws a exception if there is any problem in the test.
+     */
+    @Test
+    public void retrieveAllSwimmersWithNoSwimmers() throws Exception{
+        // Mock the swimmerService.getSwimmers() call
+        when(swimmerService.getSwimmers()).thenReturn(new ArrayList<>());
+
+        // Mock the swimmerToSwimmerResponseConverter.swimmerListToSwimmerResponseList([]) call
+        when(swimmerToSwimmerResponseConverter.swimmerListToSwimmerResponseList(new ArrayList<>())).thenReturn(new ArrayList<>());
+
+        // Mock the get request
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/swimmers").accept(MediaType.APPLICATION_JSON);
+
+        // Perform the request and then check the values
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
 
     /**
      * Helper method that generates a swimmer list with two elements for testing purposes.

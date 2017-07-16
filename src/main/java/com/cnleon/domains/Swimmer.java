@@ -45,7 +45,7 @@ public class Swimmer {
      * Birth date of the swimmer.
      * When represented in JSON format will follow the pattern "dd-MM-yyyy"
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date birthDate;
     /**
      * Birth place of the swimmer.

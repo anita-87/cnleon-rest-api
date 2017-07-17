@@ -6,12 +6,14 @@ import com.cnleon.converters.CategoryEnumConverter;
 import com.cnleon.converters.SwimmerToSwimmerResponseConverter;
 import com.cnleon.domains.Swimmer;
 import com.cnleon.enumerates.Category;
+import com.cnleon.mappers.responses.CategoryResponse;
 import com.cnleon.mappers.responses.SwimmerResponse;
 import com.cnleon.services.SwimmerService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,6 +29,7 @@ import java.util.List;
  * Controller to respond to all the calls that starts by /swimmer
  *
  * Available calls are:
+ * <li>/swimmers/categories</li>
  * <li>/swimmers</li>
  * <li>/swimmers/{id}</li>
  * <li>/swimmers/{category}</li>
@@ -92,6 +96,15 @@ public class SwimmerController {
     }
 
     /**
+     * Method to return all the swimmers's categories
+     * @return a list with categories resources
+     */
+    @RequestMapping("/swimmers/categories")
+    public List<Resource<CategoryResponse>> getCategories(){
+        return  this.getCategoryResource(Arrays.asList(Category.values()));
+    }
+
+    /**
      * Method to return all the swimmers from a category
      * @param category - the category to search swimmers from
      * @return a list with all the swimmers from that category
@@ -139,5 +152,23 @@ public class SwimmerController {
         //Link to swimmer (self)
         resource.add(linkTo(methodOn(SwimmerController.class).getSwimmer(swimmerResponse.getId())).withSelfRel());
         return resource;
+    }
+
+    /**
+     * Method to construct a resource for a CategoryResponse
+     * @param categories - a list of all the available categories
+     * @return the list of resources constructed for each category
+     */
+    private List<Resource<CategoryResponse>> getCategoryResource(List<Category> categories) {
+        List<Resource<CategoryResponse>> resourceList = new ArrayList<>();
+        Resource<CategoryResponse> resource;
+        for (Category category: categories) {
+            CategoryResponse categoryResponse = new CategoryResponse(category.toString());
+            resource = new Resource<>(categoryResponse);
+            String link = linkTo(methodOn(SwimmerController.class).getSwimmersByCategory(category)).toString().toLowerCase();
+            resource.add(new Link(link));
+            resourceList.add(resource);
+        }
+        return  resourceList;
     }
 }

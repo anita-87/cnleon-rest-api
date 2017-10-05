@@ -101,6 +101,7 @@ public class SwimmerController {
      */
     @RequestMapping("/swimmers/categories")
     public List<Resource<CategoryResponse>> getCategories(){
+        logger.info("Retrieving the swimming categories");
         return  this.getCategoryResource(Arrays.asList(Category.values()));
     }
 
